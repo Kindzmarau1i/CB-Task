@@ -1,5 +1,6 @@
 package ru.navisale.cbtask.ui.pages;
 
+import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.Selenide;
 import com.codeborne.selenide.SelenideElement;
 import ru.navisale.cbtask.ui.AbstractPageObject;
@@ -14,6 +15,18 @@ public class ProductCardPage extends AbstractPageObject {
      */
     private static final SelenideElement context = Selenide
             .$x(".//main[@class='container page__content']");
+
+    /**
+     * Лого
+     */
+    private static final SelenideElement logo = Selenide
+            .$x(".//div[@class='header__area-logo']");
+
+    /**
+     * Нотификация
+     */
+    private static final SelenideElement notification = Selenide
+            .$x(".//div[@class='notifications__item-area-content']");
 
     /**
      * Кнопка "Корзина"
@@ -72,24 +85,32 @@ public class ProductCardPage extends AbstractPageObject {
     }
 
     /**
+     * Нажать на логотип сайта
+     */
+    public void clickLogo() {
+        logo.shouldBe(Condition.visible).click();
+    }
+
+    /**
      * Нажать на кнопку "Добавить в корзину"
      */
     public void clickAddToCartButton() {
-        addToCartButton.scrollIntoView("{block: \"center\"}").click();
+        addToCartButton.shouldBe(Condition.visible).click();
+        notification.shouldBe(Condition.exist);
     }
 
     /**
      * Нажать на кнопку "+"
      */
     public void clickPlusButton() {
-        plus.click();
+        plus.shouldBe(Condition.visible).click();
     }
 
     /**
      * Нажать на кнопку "Корзина"
      */
     public void clickCartButton() {
-        cartButton.scrollIntoView("{block: \"start\"}").click();
+        cartButton.shouldBe(Condition.visible).click();
     }
 
     /**
@@ -112,7 +133,6 @@ public class ProductCardPage extends AbstractPageObject {
      */
     public String getProductName(Boolean isBrand, Boolean isColour, Boolean isSize) {
         String[] nameArray = productName.getText().split(" ");
-        //String name = "";
         if (isBrand) {
             for (String s : nameArray) {
                 return s;

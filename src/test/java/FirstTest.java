@@ -1,9 +1,9 @@
-import com.codeborne.selenide.Selenide;
 import org.junit.Assert;
 import org.junit.Test;
+import ru.navisale.cbtask.ui.constants.CountryDelivery;
 import ru.navisale.cbtask.ui.pages.*;
 
-public class FirstTest {
+public class FirstTest extends BaseTest {
 
     MainPage mainPage = new MainPage();
     CatalogPage catalogPage = new CatalogPage();
@@ -16,67 +16,65 @@ public class FirstTest {
         // Открыть сайт и перейти в карточку товара
         mainPage.open();
         mainPage.clickCatalogButton();
-        catalogPage.waitForOpened();
         catalogPage.clickDenimButton();
-        productsPage.waitForOpened();
+        productsPage.chaseCountryDelivery(CountryDelivery.CHINA);
         productsPage.clickItem(0);
-        productCardPage.waitForOpened();
         // Получить параметры товара для теста
         String productNameCardPageDenim = productCardPage.getProductName();
         String productSizeCardPageDenim = productCardPage.getProductSize();
         String productPriceCardPageDenim = productCardPage.getProductCardPrice();
-        Selenide.sleep(1000); // Нужна задержка, т.к. по непонятной причине кнопка добавления в корзину не успевает прогрузиться
         // Добавить товар в корзину
+        productCardPage.scrollPage(5, false);
         productCardPage.clickAddToCartButton();
 
         // Вернуться в каталог и перейти в карточку товара
+        productCardPage.scrollPage(5, true);
+        productCardPage.clickLogo();
         mainPage.clickCatalogButton();
-        catalogPage.waitForOpened();
         catalogPage.clickWaistcoatButton();
-        productsPage.waitForOpened();
+        productsPage.chaseCountryDelivery(CountryDelivery.USA_FULL);
         productsPage.clickItem(0);
-        productCardPage.waitForOpened();
         // Получить параметры товара для теста
         String productNameCardPageWaistcoat = productCardPage.getProductName();
         String productSizeCardPageWaistcoat = productCardPage.getProductSize();
         String productColourCardPageWaistcoat = productCardPage.getProductColour();
         String productPriceCardPageWaistcoat = productCardPage.getProductCardPrice();
-        Selenide.sleep(1000); // Нужна задержка, т.к. по непонятной причине кнопка добавления в корзину не успевает прогрузиться
         // Добавить товар в корзину
+        productCardPage.scrollPage(5, false);
         productCardPage.clickAddToCartButton();
         productCardPage.clickPlusButton();
+        productCardPage.scrollPage(5, false);
 
         // Вернуться в каталог и перейти в карточку товара
+        productCardPage.scrollPage(5, true);
+        productCardPage.clickLogo();
         mainPage.clickCatalogButton();
-        catalogPage.waitForOpened();
         catalogPage.clickJacketButton();
-        productsPage.waitForOpened();
+        productsPage.chaseCountryDelivery(CountryDelivery.GERMANY);
         productsPage.clickItem(0);
-        productCardPage.waitForOpened();
         // Получить параметры товара для теста
         String productNameCardPageJacket = productCardPage.getProductName();
         String productSizeCardPageJacket = productCardPage.getProductSize();
         String productColourCardPageJacket = productCardPage.getProductColour();
         String productPriceCardPageJacket = productCardPage.getProductCardPrice();
-        Selenide.sleep(1000); // Нужна задержка, т.к. по непонятной причине кнопка добавления в корзину не успевает прогрузиться
         // Добавить товар в корзину
         productCardPage.clickAddToCartButton();
 
-        // Перейти в карзину
+        // Перейти в корзину
+        productCardPage.scrollPage(5, true);
         productCardPage.clickCartButton();
 
         // 1.Проверить что название и параметры товара, добавленные в корзину, соответствуют добавленному ранее товару
-        cartPage.waitForOpened();
-        Assert.assertEquals(productNameCardPageDenim, cartPage.getProductName("Китай"));
-        Assert.assertEquals(productSizeCardPageDenim, cartPage.getProductSize("Китай"));
+        Assert.assertEquals(productNameCardPageDenim, cartPage.getProductName(CountryDelivery.CHINA));
+        Assert.assertEquals(productSizeCardPageDenim, cartPage.getProductSize(CountryDelivery.CHINA));
 
-        Assert.assertEquals(productNameCardPageWaistcoat, cartPage.getProductName("США"));
-        Assert.assertEquals(productSizeCardPageWaistcoat, cartPage.getProductSize("США"));
+        Assert.assertEquals(productNameCardPageWaistcoat, cartPage.getProductName(CountryDelivery.USA));
+        Assert.assertEquals(productSizeCardPageWaistcoat, cartPage.getProductSize(CountryDelivery.USA));
 //        Assert.assertEquals(productColourCardPageWaistcoat, cartPage.getProductColour("США")); TODO цвет в карточкее товара не совпадает с цветом в корзине
 
-        Assert.assertEquals(productNameCardPageJacket, cartPage.getProductName("Германии"));
-        Assert.assertEquals(productSizeCardPageJacket, cartPage.getProductSize("Германии"));
-        Assert.assertEquals(productColourCardPageJacket, cartPage.getProductColour("Германии"));
+        Assert.assertEquals(productNameCardPageJacket, cartPage.getProductName(CountryDelivery.GERMANY_GEN));
+        Assert.assertEquals(productSizeCardPageJacket, cartPage.getProductSize(CountryDelivery.GERMANY_GEN));
+        Assert.assertEquals(productColourCardPageJacket, cartPage.getProductColour(CountryDelivery.GERMANY_GEN));
 
         // 2.Проверить общее количество выбранного товара в корзине с итоговым кол-вом в sidebar`е
         String countProductCart = cartPage.getProductCountCart();
@@ -84,9 +82,9 @@ public class FirstTest {
         Assert.assertEquals(countProductCart, countProductSidebar);
 
         // 3.Для каждого товара сравнить ценник
-        Assert.assertEquals(productPriceCardPageDenim, cartPage.getProductCartPrice("Китай"));
-        Assert.assertEquals(productPriceCardPageWaistcoat, cartPage.getProductCartPrice("США"));
-        Assert.assertEquals(productPriceCardPageJacket, cartPage.getProductCartPrice("Германии"));
+        Assert.assertEquals(productPriceCardPageDenim, cartPage.getProductCartPrice(CountryDelivery.CHINA));
+        Assert.assertEquals(productPriceCardPageWaistcoat, cartPage.getProductCartPrice(CountryDelivery.USA));
+        Assert.assertEquals(productPriceCardPageJacket, cartPage.getProductCartPrice(CountryDelivery.GERMANY_GEN));
     }
 
     @Test
@@ -94,11 +92,8 @@ public class FirstTest {
         // Открыть сайт и перейти в карточку товара
         mainPage.open();
         mainPage.clickCatalogButton();
-        catalogPage.waitForOpened();
         catalogPage.clickJacketButton();
-        productsPage.waitForOpened();
-        productsPage.clickItem(2);
-        productCardPage.waitForOpened();
+        productsPage.clickItem(3);
 
         // Получить параметры товара из наименования
         String brand = productCardPage.getProductName(true, false, false);

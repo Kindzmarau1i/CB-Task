@@ -1,6 +1,7 @@
 package ru.navisale.cbtask.ui.constants;
 
 public final class XPathPatterns {
+    public static final String CHECK_BOX = ".//div[@class='checkbox-with-icon__text' and text()='%s ']";
     public static final String NAME_PRODUCT = ".//div[@class='group-items__header']//strong[text()='%s']" +
             "//ancestor::div[@class='group-items__header']/following-sibling::div//a[@data-selector='js-title']";
     public static final String SIZE_PRODUCT = ".//div[@class='group-items__header']//strong[text()='%s']" +

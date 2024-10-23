@@ -42,6 +42,6 @@ public class MainPage extends AbstractPageObject {
      * Нажать на кнопку "Каталог"
      */
     public void clickCatalogButton() {
-        catalogButton.scrollIntoView("{block: \"start\"}").shouldHave(Condition.visible).click();
+        catalogButton.shouldBe(Condition.visible).click();
     }
 }
